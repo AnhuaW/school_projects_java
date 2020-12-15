@@ -1,0 +1,33 @@
+/**
+ * A simple program that displays the result of using five arithmetic operators on two variables and their average value.
+ * @author Anhua Wu (wu.4459)
+ * @version 01202020
+ **/
+import java.util.Scanner;
+
+public class SimpleMath {
+
+    public static void main(String[] args) {
+        
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the first number: ");
+        int myNumber1 = input.nextInt();
+        System.out.print("Enter the second number: ");
+        int myNumber2 = input.nextInt();
+        input.close();
+        
+        int mySum = myNumber1 + myNumber2;
+        int mySub = myNumber1 - myNumber2;
+        int myProduct = myNumber1 * myNumber2;
+        int myQuotient = myNumber1 / myNumber2;
+        int myModule = myNumber1 % myNumber2;
+        int myAverage = mySum / 2;
+        
+        System.out.println(myNumber1 + " + " + myNumber2 + " = " + mySum);
+        System.out.println(myNumber1 + " - " + myNumber2 + " = " + mySub);
+        System.out.println(myNumber1 + " * " + myNumber2 + " = " + myProduct);  
+        System.out.println(myNumber1 + " / " + myNumber2 + " = " + myQuotient); 
+        System.out.println(myNumber1 + " % " + myNumber2 + " = " + myModule);
+        System.out.println("The average of your two numbers is: " + myAverage);     
+    }
+}
