@@ -1,0 +1,59 @@
+/**
+ * A program that displays information of long string and substring entered by the user. 
+ * It can also replace the entered substring with a new replacement string and display the final new string.
+ *
+ * @author Anhua Wu (wu.4459)
+ * @version 20200126
+ */
+import java.util.Scanner;
+
+public class FunWithStrings {
+
+    public static void main(String[] args) {
+        
+        Scanner input = new Scanner(System.in);
+        //create a new scanner
+        System.out.print("Enter a long string: " );
+        String userInput = input.nextLine();
+        
+        System.out.print("Enter a substring: ");
+        String inputSub = input.nextLine();
+        
+        int lenInput = userInput.length();
+        int lenSub = inputSub.length();
+        int startSub = userInput.indexOf(inputSub);
+        // search and return to the index of  the first character of the substring.
+        String beforeSub = userInput.substring(0,startSub);
+        // beforeSub is bounded by 0 and the index of the first character of the substring.
+        String afterSub = userInput.substring(startSub+lenSub,lenInput);
+        // startSub+lenSub gives the starting index of afterSub.
+        //lenInput makes sure everything after inputSub is stored in the variable afterSub.
+        
+        System.out.println("Length of your string: " + lenInput);
+        System.out.println("Length of your substring: " + lenSub);
+        System.out.println("Starting position of your substring: " + startSub);
+        System.out.println("String before your substring: " + beforeSub);
+        System.out.println("String after your substring: " + afterSub);
+        //display the information of the inputed substring.
+        
+        String Position = input.nextLine();
+        System.out.print("Enter a position between 0 and " + (lenInput-1) +": ");
+        //Asks the user to enter a position and store it in a string variable
+        
+        int intPosition = Integer.parseInt(Position);
+        // create a new integer variable to hold the value of position 
+        //so that it can be used in charAt(integer)syntax to find the character at a specific position.
+        char charInput = userInput.charAt(intPosition);
+        System.out.println("The character at position " + Position + " is " + charInput);
+        
+        System.out.print("Enter a replacement string: ");
+        String replacement = input.nextLine();
+        String newString = userInput.replace(inputSub, replacement);
+        // replace the input substring with new replacement string
+        System.out.println("Your new string is: "+ newString);
+        System.out.println("Goodbye!");
+        
+        input.close();
+        
+    }
+}
