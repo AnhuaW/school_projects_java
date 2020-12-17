@@ -1,0 +1,89 @@
+/** A program that checks if the credit card number being entered is valid. 
+ * 
+ * @author Anhua Wu(wu.4459)
+ * @version 02172020
+ */
+import java.util.Scanner;
+public class LuhnAlgorithm {
+    public static void main(String[] args) {
+        
+    Scanner in = new Scanner(System.in);
+    int evenNumIndex = 0;
+    int oddNumIndex = 1;
+    int lenNum;
+    int sumNum = 0;
+    int sumNumDigit;
+    int currNumEven;
+    int currNumOdd;
+    int checkEntered = 1;
+    int checkCalc = 0;
+    String cardNum;
+    
+    
+    
+    System.out.print("Enter a credit card number (enter a blank line to quit): ");
+    cardNum = in.nextLine();
+    lenNum = cardNum.length();
+    
+
+    
+        
+    while((lenNum != 0 )) {
+        if (lenNum != 16) {
+            System.out.println("ERROR! Number MUST have exactly 16 digits.");
+            System.out.println();
+            System.out.print("Enter a credit card number (enter a blank line to quit): ");
+            cardNum = in.nextLine();
+            lenNum = cardNum.length();  // checks for invalid input and asks for a valid one
+        } 
+        
+        else {
+            while(evenNumIndex <= 14) {
+                currNumEven = Integer.parseInt(cardNum.substring(evenNumIndex, evenNumIndex + 1));
+                
+                currNumEven = currNumEven*2;
+                if (currNumEven >= 10) {
+                    currNumEven = currNumEven -9;
+                }
+                sumNum = sumNum + currNumEven;
+                evenNumIndex += 2; // compute sum of digits of the even position
+                
+             }
+            while(oddNumIndex <= 13) {
+                currNumOdd = Integer.parseInt(cardNum.substring(oddNumIndex, oddNumIndex + 1));
+                sumNum = sumNum + currNumOdd;
+                oddNumIndex +=2;    // compute sum of digits of the odd position            
+            }
+               sumNumDigit = sumNum % 10;
+                if (sumNumDigit == 0) {
+                    checkCalc = sumNumDigit;
+                }
+                else {
+                    checkCalc  = 10 - sumNumDigit; 
+                }
+                checkEntered = Integer.parseInt(cardNum.substring(lenNum -1, lenNum));  
+                
+                System.out.println("Check digit should be: " + checkCalc);
+                System.out.println ("Check digit is: " + checkEntered);
+                
+                if (checkEntered == checkCalc) {
+                    System.out.println("Number is valid.");
+                }
+                else {
+                    System.out.println("Number is not valid.");
+                        
+                }
+                System.out.println();
+                System.out.print("Enter a credit card number (enter a blank line to quit): ");
+                cardNum = in.nextLine();
+                lenNum = cardNum.length();
+                evenNumIndex = 0;
+                oddNumIndex = 1;
+                sumNum = 0;
+                checkEntered = 1;
+                checkCalc = 0;
+            }
+    }
+    System.out.println("Goodbye!");
+    in.close();
+}
