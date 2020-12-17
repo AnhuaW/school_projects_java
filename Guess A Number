@@ -1,0 +1,86 @@
+/** A program that simulates a number guessing game. 
+ * 
+ * @author Anhua Wu(wu.4459)
+ * @version 02102020
+ */
+import java.util.Scanner;
+import java.util.Random;
+public class GuessANumber {
+    public static void main(String[] args) {
+        
+        Scanner in = new Scanner(System.in);
+        int timesGuess = 0;// reads the times of guesses made by the user.
+        
+        System.out.print("Enter a random seed: ");
+        int seed = Integer.parseInt(in.nextLine());
+        Random rnd = new Random(seed);
+        int num = rnd.nextInt(200) + 1;// generates a number ranging from 1 to 200.
+    
+        System.out.print("Enter a guess between 1 and 200: ");
+        int numGuess = Integer.parseInt(in.nextLine());
+        ++timesGuess;
+        
+        while(numGuess != num) {
+            while (numGuess < 1 || numGuess > 200) {// First, the program checks if input is out of range.
+                System.out.println("Your guess is out of range.  Pick a number between 1 and 200.");
+                if (numGuess < num) {
+                    System.out.println("Your guess was too low - try again.");
+                    System.out.println();
+                    System.out.print("Enter a guess between 1 and 200: ");
+                    numGuess = Integer.parseInt(in.nextLine()); 
+                    ++ timesGuess;// updates the times of guesses made by the user each time
+                    }
+                
+                else if (numGuess > num){
+                    System.out.println("Your guess was too high - try again.");
+                    System.out.println();
+                    System.out.print("Enter a guess between 1 and 200: ");
+                    numGuess = Integer.parseInt(in.nextLine()); 
+                    ++ timesGuess;
+                    }
+            }
+            
+            if (numGuess < num) {// when input is within the range, the program tells whether the guess is too large or too small.
+                System.out.println("Your guess was too low - try again.");
+                System.out.println();
+                System.out.print("Enter a guess between 1 and 200: ");
+                numGuess = Integer.parseInt(in.nextLine()); 
+                ++ timesGuess;
+                }
+            
+            else if (numGuess > num){
+                System.out.println("Your guess was too high - try again.");
+                System.out.println();
+                System.out.print("Enter a guess between 1 and 200: ");
+                numGuess = Integer.parseInt(in.nextLine()); 
+                ++ timesGuess;
+                }
+        }
+        
+        System.out.println("Congratulations!  Your guess was correct!");
+        System.out.println();
+        System.out.println("I had chosen " + num + " as the target number.");
+        System.out.println("You guessed it in " + timesGuess + " tries.");
+        
+        if (timesGuess == 1) {// the following section check for times of guesses made by the user and make comments about the game.
+            System.out.println("That was impossible!");
+        }
+        else if(timesGuess == 2 || timesGuess == 3) {
+            System.out.println("You're pretty lucky!");
+        } 
+        else if (timesGuess >= 4 && timesGuess <= 7) {
+            System.out.println("Not bad, not bad...");
+        }
+        else if (timesGuess == 8) {
+            System.out.println("That was not very impressive.");
+        }
+        else if (timesGuess == 9 || timesGuess == 10) {
+            System.out.println("Are you having any fun at all?");
+        }
+        else {
+            System.out.println("Maybe you should play something else.");
+        }
+            in.close();   
+    }
+
+}
