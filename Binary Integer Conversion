@@ -1,0 +1,244 @@
+/**
+ * A program that simulates a binary and integer converter.
+ * @author Anhua Wu (wu.4459)
+ * @version DATE 20200324
+ */
+import java.util.Scanner;
+
+public class BinaryNumbers {
+
+    /**
+     * Given a Scanner as input, prompt the user to enter an integer value. Use
+     * the function validInteger below to make sure that the value entered is
+     * actually a decimal value and not junk. Then return the value entered by
+     * the user as an integer to the calling method.
+     *
+     * @param input
+     *            A scanner to take user input from
+     * @return a valid integer value read from the user
+     */
+    public static int promptForInteger(Scanner input) {
+        System.out.print("Enter a positive integer value: ");
+        String val = input.nextLine();
+        while (!validInteger(val)) {
+            System.out.println("ERROR - value must contain only digits");
+            System.out.print("Enter a positive integer value: ");
+            val = input.nextLine();
+        }
+        return Integer.parseInt(val);
+    }
+
+    /**
+     * Given a Scanner as input, prompt the user to enter a binary value. Use
+     * the function validBinary below to make sure that the value entered is
+     * actually a binary value and not junk. Then return the value entered by
+     * the user as an String to the calling method.
+     *
+     * @param input
+     *            A scanner to take user input from
+     * @return a String representing a binary value read from the user
+     */
+    public static String promptForBinary(Scanner input) {
+        System.out.print("Enter a binary value: ");
+        String val = input.nextLine();
+        while (!validBinary(val)) {
+            System.out.println("ERROR - value must contain only 1 and 0");
+            System.out.print("Enter a binary value: ");
+            val = input.nextLine();
+        }
+        return val;
+    }
+
+    /**
+     * Given a String as input, return true if the String represents a valid
+     * positive integer value (i.e. contains only digits). Returns false if the
+     * String does not represent a positive integer value.
+     *
+     * Note that you must NOT use Exception Handling to implement this. If you
+     * search on the net for solutions, that is what you will find but you
+     * should not use it here - you can solve this using only what we have
+     * discussed in class.
+     *
+     * Note too that your code does not need to worry about the number
+     * represented being too large or too small (more than Integer.MAX_VALUE or
+     * less than Integer.MIN_VALUE. Just worry about the constraints given above
+     * for now (but for a challenge, try to figure out how to do it using only
+     * what you have learned so far in class - it is not a simple problem to
+     * solve.)
+     *
+     * @param value
+     *            A String value that may contain an integer input
+     * @return true if the String value contains an integer input, false
+     *         otherwise
+     */
+    public static boolean validInteger(String value) {
+        // Value needs to be positive
+        // value needs to be integer
+        char [] myArr = {'0', '1','2','3','4','5','6','7','8','9'};//creates a reference list for checking whether the input represents a valid integer.
+        int userInLen = value.length();
+        int arrLen = myArr.length;
+        int i = 0;
+        int j = 0;
+        char userIn;
+        boolean [] val = new boolean [userInLen];
+        boolean valFinal = true;	
+        
+        if (userInLen == 0) {
+            valFinal = false;
+        }
+        else {
+            for (i = 0; i < userInLen; i++) {
+                userIn = value.charAt(i);
+                val[i] = false;// initialize the element in boolean array to be false
+                for (j = 0; (j < arrLen); j++) {
+                    if (userIn == myArr[j]) {
+                        val[i] = true;// change the boolean element into true when a character from the string finds its match in reference list
+                    }
+                }
+            }
+            for (i = 0; i < userInLen; i++) {
+                if (val[i] == false) {
+                    valFinal = val[i];
+                }
+            }
+        }
+        return valFinal;
+        
+    }
+
+    /**
+     * Given a String as input, return true if the String represents a valid
+     * binary value (i.e. contains only the digits 1 and 0). Returns false if
+     * the String does not represent a binary value.
+     *
+     * @param value
+     *            A String value that may contain a binary value
+     * @return true if the String value contains a binary value, false otherwise
+     */
+    public static boolean validBinary(String value) {
+        char [] myArr = {'0', '1'};//creates a reference list for checking whether the input represents a valid binary.
+        int userInLen = value.length();
+        int arrLen = myArr.length;
+        int i = 0;
+        int j = 0;
+        char userIn;
+        boolean [] val = new boolean [userInLen];
+        boolean valFinal = true;
+        
+        if (userInLen == 0) {
+            valFinal = false;
+            return valFinal;
+        }
+        else {
+            for (i = 0; i < userInLen; i++) {
+                userIn = value.charAt(i);
+                val[i] = false;// initialize the element in the boolean array to be false
+                for (j = 0; (j < arrLen); j++) {
+                    if (userIn == myArr[j]) {
+                        val[i] = true;// change the boolean element into true when a character from the string finds its match in reference list
+                    }
+                }
+            }
+            for (i = 0; i < userInLen; i++) {
+              if (val[i] == false) {
+                valFinal = false; // to determine whether the input is valid, the loop judges if all characters from userInput finds its match. If not, validBinary returns to false.
+              }
+            }
+            return valFinal;
+        }
+    }
+
+    /**
+     * Given a binary value, return an int value that is the base 10
+     * representation of that value. Your implementation must use the algorithm
+     * described in the Project write-up. Other algorithms will receive no
+     * credit.
+     *
+     * @param value
+     *            A String containing a binary value to convert to integer
+     * @return The base 10 integer value of that binary in the String
+     */
+    public static int binaryToInt(String value) {
+        int binaryLen = value.length();
+        int i = 0;
+        int binary;
+        int userInt = 0;
+        for (i = 1; i <= binaryLen; i++) {
+            binary = Integer.parseInt(value.substring(i-1,i));
+            userInt += binary * Math.pow( 2,binaryLen -i );     
+            }
+        return userInt;
+    }
+
+    /**
+     * Given an integer value, return a String that is the binary representation
+     * of that value. Your implementation must use the algorithm described in
+     * the Project write-up. Other algorithms will receive no credit.
+     *
+     * @param value
+     *            An integer value to convert to binary
+     * @return A String containing the binary representation of value
+     */
+    public static String intToBinary(int value) {
+        int quotient = value/2;
+        int rem = value % 2;
+        String strBi = Integer.toString(rem);
+        String strRev = "";
+        while (quotient !=0) {
+            rem = quotient % 2;
+            strBi += Integer.toString(rem);// converts binary numbers to string so it can be expanded.
+            quotient = quotient/2;
+        }
+        int strLen = strBi.length();
+        int i = 0;
+        for (i = strLen - 1; i >= 0; i--) {
+            strRev += strBi.charAt(i);
+        }
+        return strRev;
+    }
+
+    /**
+     * Procedure to display a simple menu to the screen.
+     */
+    public static void displayMenu() {
+        System.out.println("Please make a choice: ");
+        System.out.println("1 - Integer to Binary Conversion");
+        System.out.println("2 - Binary to Integer Conversion");
+        System.out.println("3 - Quit");
+    }
+
+    public static void main(String[] args) {
+        // Set up the scanner
+        Scanner keyboard = new Scanner(System.in);
+        // Display the menu and get the user choice
+        displayMenu();
+        int choice = promptForInteger(keyboard);
+
+        // Loop until the user chooses to quit
+        while (choice != 3) {
+            if (choice == 1) {
+                // User has chosen integer to binary
+                int value = promptForInteger(keyboard);
+                String binary = intToBinary(value);
+                System.out.print("The integer value " + value);
+                System.out.println(" is the binary value " + binary);
+            } else if (choice == 2) {
+                // User has chosen binary to integer
+                String binary = promptForBinary(keyboard);
+                int value = binaryToInt(binary);
+                System.out.print("The binary value " + binary);
+                System.out.println(" is the integer value " + value);
+            } else {
+                // User has chosen an invalid choice
+                System.out.println("ERROR - Valid choices are 1, 2 or 3.");
+            }
+            System.out.println();
+            // Display the menu again and get a new choice
+            displayMenu();
+            choice = promptForInteger(keyboard);
+        }
+        System.out.println();
+        System.out.println("Goodbye!");
+        keyboard.close();
+    }
+}
