@@ -1,0 +1,327 @@
+/**
+ * A program that plays a word guessing game with the user.
+ * @author Anhua Wu
+ * @version 20200420
+ *
+ */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+public class WordGuessing {
+
+    /**
+     * Takes a filename as input. Reads a list of words from the file into a
+     * list and returns the list. Ensures that all of the words in the list are
+     * in UPPERCASE (i.e. transforms lowercase letters to uppercase before
+     * adding them to the list). Assumes that the file will be correctly
+     * formatted with one word per line. If the file cannot be read prints the
+     * error message "ERROR: File fname not found!" where "fname" is the name of
+     * the file and returns an empty list.
+     *
+     * @param fname
+     *            the name of the file to read words from
+     * @return a list of words read from the file in all uppercase letters.
+     */
+    public static List<String> readWords(String fname) {
+        List<String> words = new ArrayList<String>();
+        try { 
+            File textFile = new File (fname);
+            Scanner textScanner = new Scanner (textFile);
+            
+            while(textScanner.hasNext()) {
+                String str = textScanner.nextLine();
+                String strUp = str.toUpperCase();
+                if (!str.isEmpty()) {// makes sure that empty lines are not included in the arraylists
+                    words.add(strUp);
+                }
+            }
+            textScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR: File " + fname + " not found!");
+            return words;
+        }
+        return words;
+    }
+
+    /**
+     * Takes a Random object and a list of strings and returns a random String
+     * from the list. Note that this method must not change the list.
+     *
+     * @param rnd
+     *            Random number generator object
+     * @param inList
+     *            list of strings to choose from
+     * @return an element from a random position in the list
+     */
+    public static String getRandomWord(Random rnd, List<String> inList) {
+       
+        String currStr = "";
+        int size = inList.size();
+        int rndIndex = rnd.nextInt(size);// reads a random word within the valid index
+        currStr = inList.get(rndIndex);
+        
+        return currStr;
+    }
+
+    /**
+     * Given a String, returns a StringBuilder object that is the same length
+     * but is only '*' characters. For example, given the String DOG as input
+     * returns a StringBuilder object containing "***".
+     *
+     * @param inWord
+     *            The String to be starred
+     * @return a StringBuilder with the same length as inWord, but all stars
+     */
+    public static StringBuilder starWord(String inWord) {
+        int strLen = inWord.length();
+        StringBuilder sb = new StringBuilder();
+        int i;
+        for (i = 0; i < strLen; i++) {
+            sb.append("*");
+        }
+        return sb;
+    }
+
+    /**
+     * Prompts the user to enter a single character. If the user enters a blank
+     * line or more than one character, give an error message as given in the
+     * assignment and prompt them again. When the user enters a single
+     * character, return the uppercase value of the character they typed.
+     *
+     * @param inScanner
+     *            A scanner to take user input from
+     * @return the uppercase value of the character typed by the user.
+     */
+    public static char getCharacterGuess(Scanner inScanner) {
+
+        System.out.print("Enter a character to guess: ");
+        String userIn = inScanner.nextLine();
+        int userInLen = userIn.length();
+        while (userInLen!= 1) {// makes sure only one character is being stored
+            System.out.println("Enter only a single character!");
+            System.out.print("Enter a character to guess: ");
+            userIn = inScanner.nextLine();
+            userInLen = userIn.length();
+        }
+        char userGuess = userIn.toUpperCase().charAt(0);
+        return userGuess;
+    }
+
+    /**
+     * Count the number of times the character ch appears in the String word.
+     *
+     * @param ch
+     *            character to count.
+     * @param word
+     *            String to examine for the character ch.
+     * @return a count of the number of times the character ch appears in the
+     *         String word
+     */
+    public static int charCount(char ch, String word) {
+        int strLen = word.length();
+        int i = 0;
+        char currChar;
+        int charCount = 0;
+        for (i = 0; i < strLen; i++) {// compares each character in the word with the character chosen by the user
+            currChar = word.charAt(i);
+            if (ch == currChar) {
+                charCount ++;
+            }
+        }
+        return charCount;
+    }
+
+    /**
+     * Modify the StringBuilder object starWord everywhere the char ch appears
+     * in the String word. For example, if ch is 'G', word is "GEOLOGY", and
+     * starWord is "**O*O*Y", then this method modifies starWord to be
+     * "G*O*OGY".
+     *
+     * @param ch
+     *            the character to look for in word.
+     * @param word
+     *            the String containing the full word.
+     * @param starWord
+     *            the StringBuilder containing the full word masked by stars.
+     */
+    public static void modifyStarWord(char ch, String word,
+            StringBuilder starWord) {
+        int strLen = word.length();
+        int i = 0;
+        char currChar;
+        for (i = 0; i < strLen; i++) {
+            currChar = word.charAt(i);
+            if (ch == currChar) {
+                starWord.setCharAt(i ,ch);//replace the star with the matching character
+            }
+        }
+
+    }
+    /**
+     * Get user's choice regarding the rematch
+     *
+     * @param in
+     *            get user's input
+     * @return a boolean value indicating whether the user wants a rematch.
+     */
+    public static boolean enterRematch(Scanner in) {
+        boolean choice = false;
+        String userIn;
+        String userChoice;
+        
+        System.out.print("Would you like a rematch [Y/N]?: ");
+        userIn = in.nextLine();
+        userChoice = userIn.toUpperCase();
+        
+        while ((!userChoice.equals("Y") &&(!userChoice.equals("N")))) {// when the user enter invalid choice, promts the user to enter a valid input
+            System.out.println("Please enter only a Y or an N.");
+            System.out.print("Would you like a rematch [Y/N]?: ");
+            userIn = in.nextLine();
+            userChoice = userIn.toUpperCase();
+        }
+        if (userChoice.equals("Y")) {
+            choice = true;
+        }
+        
+        
+        return choice;
+    }
+
+    public static void main(String[] args) {
+       Scanner in = new Scanner(System.in);
+        
+        int seed;
+        String fname = "";
+        StringBuilder starWord = new StringBuilder();
+        List<String> words = new ArrayList<String>();
+        int listLen;
+        String rndWord;
+        char userChar;
+        int charCounts;
+        String userGuess;
+        int guessCounts = 0;
+        List<Character> charGuessed =  new ArrayList<Character>();// the arraylist makes sure there is felxibility to add element whenever the user enter a new guess
+        
+        System.out.print("Enter a random seed: ");
+        seed = Integer.parseInt(in.nextLine());
+        Random rnd = new Random(seed);
+        
+        System.out.print("Enter a filename for your wordlist: ");
+        fname = in.nextLine();
+        words = readWords(fname);
+        listLen = words.size();
+        
+        if (listLen != 0) {// continues the game if the wordlist is not empty
+            System.out.println("Read " + listLen + " words from the file.");
+            System.out.println();
+            
+            rndWord = getRandomWord(rnd, words);
+            starWord = starWord(rndWord); 
+            
+            System.out.println("The word to guess is: " + starWord.toString());
+            System.out.println("Previous characters guessed: " + Arrays.toString(charGuessed.toArray()));
+        
+            userChar = getCharacterGuess(in);
+            charGuessed.add(userChar);
+            charCounts = charCount(userChar,rndWord);
+            modifyStarWord( userChar,rndWord,starWord);
+        
+            System.out.println("The character " + userChar + " occurs in " + charCounts + " positions.");
+            System.out.println();
+            
+            System.out.println("The word to guess is: " + starWord.toString());
+            System.out.print("Enter your guess for the word: ");
+            userGuess = in.nextLine().toUpperCase();
+            guessCounts++;// when the user makes a new guess, guessCount increases by 1
+            
+            while (!(userGuess.equals(rndWord))) {// keeps prompting for new guesses until user's guess mathces with the random word 
+                System.out.println("That is not the word.");
+                System.out.println();
+                System.out.println();
+                System.out.println("The word to guess is: " + starWord.toString());
+                System.out.println("Previous characters guessed: " + Arrays.toString(charGuessed.toArray()));
+            
+                userChar = getCharacterGuess(in);
+                charGuessed.add(userChar);
+                charCounts = charCount(userChar,rndWord);
+                modifyStarWord( userChar,rndWord,starWord);
+            
+                System.out.println("The character " + userChar + " occurs in " + charCounts + " positions.");
+                System.out.println();
+                
+                System.out.println("The word to guess is: " + starWord.toString());
+                System.out.print("Enter your guess for the word: ");
+                userGuess = in.nextLine().toUpperCase();
+                guessCounts++;
+                
+            }
+            
+            System.out.println("Yes! " + userGuess + " is the correct word!");
+            System.out.println();
+            System.out.println("That took you " + guessCounts + " guesses.");
+            
+            while(enterRematch(in)) {// if the user chooses to enter a rematch, reset charGuessed and guessCounts
+                charGuessed.clear();
+                guessCounts = 0;
+                rndWord = getRandomWord(rnd, words);
+                starWord = starWord(rndWord); 
+                
+                System.out.println();
+                System.out.println("The word to guess is: " + starWord.toString());
+                System.out.println("Previous characters guessed: " + Arrays.toString(charGuessed.toArray()));
+            
+                userChar = getCharacterGuess(in);
+                charGuessed.add(userChar);
+                charCounts = charCount(userChar,rndWord);
+                modifyStarWord( userChar,rndWord,starWord);
+            
+                System.out.println("The character " + userChar + " occurs in " + charCounts + " positions.");
+                System.out.println();
+                
+                System.out.println("The word to guess is: " + starWord.toString());
+                System.out.print("Enter your guess for the word: ");
+                userGuess = in.nextLine().toUpperCase();
+                guessCounts++;
+                
+                while (!(userGuess.equals(rndWord))) {
+                    System.out.println("That is not the word.");
+                    System.out.println();
+                    System.out.println();
+                    System.out.println("The word to guess is: " + starWord.toString());
+                    System.out.println("Previous characters guessed: " + Arrays.toString(charGuessed.toArray()));
+                
+                    userChar = getCharacterGuess(in);
+                    charGuessed.add(userChar);
+                    charCounts = charCount(userChar,rndWord);
+                    modifyStarWord( userChar,rndWord,starWord);
+                
+                    System.out.println("The character " + userChar + " occurs in " + charCounts + " positions.");
+                    System.out.println();
+                    
+                    System.out.println("The word to guess is: " + starWord.toString());
+                    System.out.print("Enter your guess for the word: ");
+                    userGuess = in.nextLine().toUpperCase();
+                    guessCounts++;
+                    
+                }
+                
+                System.out.println("Yes! " + userGuess + " is the correct word!");
+                System.out.println();
+                System.out.println("That took you " + guessCounts + " guesses.");
+            }
+            System.out.println("Goodbye!");// if the user choose not to enter a rematch, the program ends and displays a goodbye message
+            
+        }
+        else {
+            System.out.println("No words read - exiting program!");// if the wordlist is empty, the program ends 
+            System.out.println("Goodbye!");
+        }
+        in.close();   
+    }
+}
