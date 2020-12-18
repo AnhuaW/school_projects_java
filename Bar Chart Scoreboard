@@ -1,0 +1,72 @@
+/**
+ * A program that generates a bar chart based on the scoreboard entered by the user
+ * 
+ * @author Anhua Wu (wu.4459) 
+ * @version 20200224
+ */
+import java.util.Scanner;
+public class BarChartScoreboard {
+    public static void  main(String[] args){
+    Scanner in  = new Scanner(System.in);
+    
+    System.out.print("Enter the number of players: ");
+    int numPlayer = Integer.parseInt(in.nextLine());
+    if(numPlayer == 0) {
+        System.out.println("No players to display?  Goodbye!");// exit the program if the user has no player to display
+    }
+    else {
+        String[] myPlayer = new String[numPlayer];
+        int[] score =  new int[numPlayer];
+        int[] numStars  = new int [numPlayer];
+        int i;// times that the loop iterates
+        int maxScore = 0;
+        int maxLength = 0;
+        int j;// times that the inner loop iterates
+        String currScore = "Current Scoreboard";
+        String str2 = ""; // empty string created to store the line under Current Scoreboard
+        
+        for(i = 0; i < numPlayer; i++) {
+            System.out.print("Enter a player name: ");
+            myPlayer[i] = in.nextLine();
+            System.out.print("Enter the score for " + myPlayer[i] + ": ");
+            score[i] = Integer.parseInt(in.nextLine());
+            if (score[i] > maxScore) {
+                maxScore = score[i];//reads the maxScore
+            }
+            if(myPlayer[i].length() > maxLength) {
+                maxLength =  myPlayer[i].length();// reads the length of the longest name 
+            }
+            System.out.println();
+        }
+        for(i = 0; i < numPlayer; i++) {
+            if (maxScore != 0) {
+                numStars[i] = ((score[i]*50) /maxScore);// computes the number of stars needed to create each bar 
+            }
+            else {
+                numStars[i] = 0;
+            }
+        }
+        
+        System.out.println(currScore);
+        for(i = 0; i < currScore.length();i++ ) {
+            str2 += "-";
+        }
+        System.out.println(str2);
+                
+        for(i = 0; i < numPlayer; i++) {
+            while(myPlayer[i].length()!= maxLength) {// makes sure the bars will be aligned 
+                myPlayer[i] += " ";
+            }
+            System.out.print(myPlayer[i] + " ");
+            for (j = 0; j < numStars[i]; j++) { // generates bar for each player
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    
+    }
+    
+    in.close();
+    }
+
+}
