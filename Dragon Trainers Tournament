@@ -1,0 +1,177 @@
+/**
+ * The program generates a dragon trainer game.
+ * @author Anhua Wu (wu.4459)
+ * @version 20200302
+ */
+import java.util.Random;
+import java.util.Scanner;
+
+public class DragonTrainers {
+
+    private static final String[] DRAGONS = { "Plant", "Water", "Fire" };
+
+    public static int getNumberOfMatches(Scanner input) {
+ 
+        int numMatches;
+        System.out.print("How many matches will we play? ");
+        numMatches = Integer.parseInt(input.nextLine());
+        while (numMatches <= 0) {
+            System.out.println("ERROR - number of matches must be positive!");
+            System.out.print("How many matches will we play? ");
+            numMatches = Integer.parseInt(input.nextLine());
+        }
+        return numMatches;
+    }
+
+    
+    public static String promptForDragon(Scanner input) {
+     
+        String dragonType;
+        System.out.print("Please select a dragon [Plant/Water/Fire]: ");
+        dragonType = input.nextLine();
+        while(dragonType.length() == 0) {
+            System.out.println("ERROR - Dragon prompt cannot be empty.");
+            System.out.print("Please select a dragon [Plant/Water/Fire]: ");
+            dragonType = input.nextLine();
+        }
+        return dragonType;
+    }
+
+ 
+    public static int dragonToNumber(char dragon) {
+        
+        dragon = Character.toUpperCase(dragon);
+        int dragonIndex;
+        if (dragon == 'P') {
+            dragonIndex = 0;
+        }
+        else if(dragon == 'W'){
+            dragonIndex = 1;
+        }
+        else if(dragon == 'F') {
+            dragonIndex = 2;
+        }
+        else {
+            dragonIndex = -1;
+        }
+        
+        return dragonIndex;
+    }
+
+   
+    public static int determineWinner(int player, int cpu) {
+        
+        int result = 0;
+        if (cpu == player + 1) {
+            result = 1;
+        }
+        else if (cpu == player -1) {
+            result = -1;
+        }
+        else if(cpu == player + 2) {
+            result = -1;
+        }
+        else if(player == cpu + 2 ) {
+            result = 1;
+        }
+        return result;
+    }
+
+   
+    public static void displayMatchResult(int player, int cpu, int winner) {
+        if (winner > 0) {
+            System.out.println(DRAGONS[player] + " defeats " + DRAGONS[cpu] + " - you win!");
+        }
+        else if (winner < 0) {
+            System.out.println(DRAGONS[cpu] + " defeats " + DRAGONS[player] + " - you lose!");
+        }
+        else {
+            System.out.println("A Tie!");
+        }
+    }
+
+ 
+    public static void displayFinalResult(int wins, int losses, int ties) {
+        // TODO - complete this method
+        System.out.println("The tournament is over!");
+        System.out.println("We tied " + ties + " matches.");
+        System.out.println("I won " + losses + " matches.");
+        System.out.println("You won " + wins + " matches.");
+        if (wins > losses){
+            System.out.println("You are the winner!");
+        }
+        else if (losses > wins) {
+            System.out.println("I am the winner!");
+        }
+        else {
+            System.out.println("Neither of us can claim victory here!");
+        }
+        
+    }
+
+    public static void main(String[] args) {
+        // Prompt for a random number seed
+        Scanner keyboard = new Scanner(System.in);
+        System.out.print("Enter a random seed: ");
+        int seed = Integer.parseInt(keyboard.nextLine());
+        // Create a Random instance with the seed
+        Random rnd = new Random(seed);
+        // Prompt for number of matches to play
+        int totalMatches = getNumberOfMatches(keyboard);
+
+        // Start with wins, losses and ties at 0.
+        // Repeat until all matches have been played (use the sum of the
+        // results so we don't need another variable)
+        int wins = 0, losses = 0, ties = 0;
+        while ((wins + losses + ties) < totalMatches) {
+            // Ask the user for a dragon to use
+            String input = promptForDragon(keyboard);
+
+            // Get the first character of the user's input as an uppercase
+            // value.
+            char dChar = input.toUpperCase().charAt(0);
+
+            // Convert the user's input to an index for the DRAGONS array
+            int playerDragon = dragonToNumber(dChar);
+
+            // Generate a choice between 0 and 2 for the computer
+            int cpuDragon = rnd.nextInt(3);
+
+            // Display the results
+            System.out.println("I chose: " + DRAGONS[cpuDragon] + " dragon.");
+
+            // If the player didn't enter a valid choice, print out an error
+            // message and increase the number of losses.
+            if (playerDragon == -1) {
+                System.out.println("You don't have the " + input + " dragon.");
+                System.out.println("So no dragon fights for you.");
+                System.out.println("I win by default!");
+                losses++;
+            } else {
+                // Print out the player's choice.
+                System.out.println("You chose: " + DRAGONS[playerDragon] + " dragon.");
+                // Determine who won the match.
+                int winner = determineWinner(playerDragon, cpuDragon);
+                // Display the result of the match.
+                displayMatchResult(playerDragon, cpuDragon, winner);
+
+                // Increase the count of wins, losses or ties according to
+                // who won the match.
+                if (winner > 0) {
+                    wins++;
+                } else if (winner < 0) {
+                    losses++;
+                } else {
+                    ties++;
+                }
+            }
+            System.out.println();
+        }
+        // Display the final summary of the match to the screen.
+        displayFinalResult(wins, losses, ties);
+
+        // Don't forget to close the Scanner!
+        keyboard.close();
+    }
+
+}
